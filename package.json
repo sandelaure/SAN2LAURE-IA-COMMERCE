@@ -1,0 +1,1 @@
+{"name":"san2laure-ia-commerce","version":"1.0.0","private":true,"type":"module","scripts":{"start":"node server.js"},"dependencies":{"express":"^5.1.0"}}
