@@ -34,28 +34,33 @@ async function products(){
       <button class="btn" onclick="addProduct()">+ Ajouter</button>
     </h1>
 
-    <table class="table">
-      <tr>
-        <th>Produit</th>
-        <th>Catégorie</th>
-        <th>Prix</th>
-        <th>Stock</th>
-        <th>Actions</th>
-      </tr>
+    <div class="product-list">
 
       ${p.map(x=>`
-        <tr>
-          <td>${x.name}</td>
-          <td>${x.category}</td>
-          <td>${money(x.price)}</td>
-          <td>${x.stock}</td>
-          <td>
-            <button class="btn" onclick="editProduct(${x.id})">✏️</button>
-            <button class="btn" onclick="deleteProduct(${x.id})">🗑️</button>
-          </td>
-        </tr>
+        <div class="card product-card">
+
+          <h2>${x.name}</h2>
+
+          <p><b>Catégorie :</b> ${x.category}</p>
+
+          <p><b>Prix :</b> ${money(x.price)}</p>
+
+          <p><b>Stock :</b> ${x.stock}</p>
+
+          <div class="product-actions">
+            <button class="btn" onclick="editProduct(${x.id})">
+              ✏️ Modifier
+            </button>
+
+            <button class="btn" onclick="deleteProduct(${x.id})">
+              🗑️ Supprimer
+            </button>
+          </div>
+
+        </div>
       `).join('')}
-    </table>`;
+
+    </div>`;
 }
 
 async function addProduct(){
