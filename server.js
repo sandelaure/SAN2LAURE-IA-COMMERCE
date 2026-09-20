@@ -26,5 +26,5 @@ app.get("/api/conversations",async(_q,r)=>{try{r.json((await pool.query("SELECT 
 app.post("/api/conversations",async(q,r)=>{try{let b=q.body,x=await pool.query("INSERT INTO conversations(customer_phone,customer_name,last_message,intent,status) VALUES($1,$2,$3,$4,$5) RETURNING *",[String(b.customer_phone||""),String(b.customer_name||""),String(b.last_message||""),String(b.intent||""),String(b.status||"Open")]);r.status(201).json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
 app.get("/webhook/whatsapp",(q,r)=>{if(q.query["hub.mode"]==="subscribe"&&q.query["hub.verify_token"]===process.env.WHATSAPP_VERIFY_TOKEN)return r.status(200).send(q.query["hub.challenge"]);r.sendStatus(403)});
 app.post("/webhook/whatsapp",(q,r)=>{console.log("WhatsApp webhook:",JSON.stringify(q.body));r.sendStatus(200)});
-app.use(express.static(path.join(__dirname,"public")));app.get("*",(_q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
+app.get("/*splat",(_q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
 initDb().then(()=>app.listen(PORT,()=>console.log(BUSINESS_NAME+" running on "+PORT))).catch(e=>{console.error(e);process.exit(1)});
