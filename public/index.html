@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SAN2LAURE IA COMMERCE</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fb;
+  color:#172033
+}
+header{
+  background:#111827;
+  color:white;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+header h1{margin:0;font-size:20px}
+header span{font-size:13px;color:#cbd5e1}
+
+nav{
+  background:white;
+  padding:12px;
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  border-bottom:1px solid #e5e7eb
+}
+nav button{
+  border:0;
+  background:#eef2ff;
+  color:#1e3a8a;
+  padding:10px 15px;
+  border-radius:8px;
+  font-weight:bold;
+  white-space:nowrap
+}
+nav button.active{
+  background:#111827;
+  color:white
+}
+
+main{padding:20px;max-width:1200px;margin:auto}
+
+.section{display:none}
+.section.active{display:block}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin-bottom:25px
+}
+.card{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 10px #0000000d
+}
+.card small{color:#64748b}
+.card strong{
+  display:block;
+  font-size:30px;
+  margin-top:8px
+}
+
+.panel{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 2px 10px #0000000d
+}
+
+.panel h2{
+  margin-top:0;
+  font-size:20px
+}
+
+table{
+  width:100%;
+  border-collapse:collapse
+}
+th,td{
+  text-align:left;
+  padding:12px 8px;
+  border-bottom:1px solid #e5e7eb;
+  font-size:14px
+}
+th{color:#475569}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#dcfce7;
+  color:#166534;
+  font-size:12px;
+  font-weight:bold
+}
+
+.btn{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold
+}
+.btn-primary{
+  background:#111827;
+  color:white
+}
+.btn-danger{
+  background:#fee2e2;
+  color:#991b1b
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  margin:6px 0 12px;
+  font-size:15px
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px
+}
+
+.status{
+  margin-top:15px;
+  padding:12px;
+  border-radius:8px;
+  background:#eff6ff;
+  color:#1e40af
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#64748b
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:#64748b;
+  font-size:13px
+}
+
+@media(max-width:600px){
+  main{padding:12px}
+  header h1{font-size:17px}
+  th,td{font-size:12px;padding:9px 5px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>🤖 SAN2LAURE IA COMMERCE</h1>
+    <span>IGOSA SERVICES</span>
+  </div>
+  <span id="connection">Connexion...</span>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('dashboard',this)">📊 Tableau de bord</button>
+  <button onclick="showSection('products',this)">🛍️ Produits</button>
+  <button onclick="showSection('orders',this)">📦 Commandes</button>
+  <button onclick="showSection('conversations',this)">💬 Conversations</button>
+</nav>
+
+<main>
+
+<section id="dashboard" class="section active">
+
+  <div class="cards">
+    <div class="card">
+      <small>Produits</small>
+      <strong id="countProducts">0</strong>
+    </div>
+
+    <div class="card">
+      <small>Commandes</small>
+      <strong id="countOrders">0</strong>
+    </div>
+
+    <div class="card">
+      <small>Conversations</small>
+      <strong id="countConversations">0</strong>
+    </div>
+
+    <div class="card">
+      <small>Statut système</small>
+      <strong style="font-size:20px">🟢 ACTIF</strong>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Bienvenue dans SAN2LAURE IA COMMERCE</h2>
+    <p>
+      Assistant commercial intelligent de <strong>IGOSA SERVICES</strong>.
+    </p>
+    <p>
+      Le système permet de gérer les produits, les commandes et les
+      conversations des clients.
+    </p>
+
+    <div class="status" id="systemStatus">
+      Vérification de la connexion à la base de données...
+    </div>
+  </div>
+
+</section>
+
+
+<section id="products" class="section">
+
+  <div class="panel">
+    <h2>🛍️ Gestion des produits</h2>
+
+    <form id="productForm">
+
+      <div class="form-grid">
+
+        <div>
+          <label>Nom du produit</label>
+          <input id="productName" required>
+        </div>
+
+        <div>
+          <label>Catégorie</label>
+          <input id="productCategory">
+        </div>
+
+        <div>
+          <label>Prix CFA</label>
+          <input id="productPrice" type="number" required>
+        </div>
+
+        <div>
+          <label>Prix promotionnel</label>
+          <input id="productPromo" type="number">
+        </div>
+
+        <div>
+          <label>Stock</label>
+          <input id="productStock" type="number" value="0">
+        </div>
+
+        <div>
+          <label>Variantes</label>
+          <input id="productVariants" placeholder="Noir, Marron, Rouge">
+        </div>
+
+      </div>
+
+      <label>Description</label>
+      <textarea id="productDescription" rows="3"></textarea>
+
+      <button class="btn btn-primary" type="submit">
+        ➕ Ajouter le produit
+      </button>
+
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Catalogue</h2>
+
+    <div style="overflow:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>Variantes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="productsTable">
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</section>
+
+
+<section id="orders" class="section">
+
+  <div class="panel">
+    <h2>📦 Commandes</h2>
+
+    <div style="overflow:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Client</th>
+            <th>Téléphone</th>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+
+        <tbody id="ordersTable">
+        </tbody>
+
+     
