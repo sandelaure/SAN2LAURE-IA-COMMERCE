@@ -2,326 +2,652 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SAN2LAURE IA COMMERCE</title>
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f7fb;
-  color:#172033
-}
-header{
-  background:#111827;
-  color:white;
-  padding:18px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center
-}
-header h1{margin:0;font-size:20px}
-header span{font-size:13px;color:#cbd5e1}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
+header{background:#111827;color:#fff;padding:18px}
+header h1{margin:0;font-size:21px}
+header small{color:#cbd5e1}
+#connection{float:right;margin-top:-30px}
 
 nav{
-  background:white;
-  padding:12px;
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  border-bottom:1px solid #e5e7eb
+display:flex;gap:8px;overflow-x:auto;background:#fff;
+padding:12px;border-bottom:1px solid #ddd
 }
 nav button{
-  border:0;
-  background:#eef2ff;
-  color:#1e3a8a;
-  padding:10px 15px;
-  border-radius:8px;
-  font-weight:bold;
-  white-space:nowrap
+border:0;border-radius:10px;padding:13px 18px;
+background:#e9eefc;color:#173b80;font-weight:bold;
+white-space:nowrap;font-size:15px
 }
-nav button.active{
-  background:#111827;
-  color:white
-}
+nav button.active{background:#111827;color:#fff}
 
-main{padding:20px;max-width:1200px;margin:auto}
-
-.section{display:none}
-.section.active{display:block}
+main{padding:15px;max-width:1100px;margin:auto}
+.page{display:none}
+.page.active{display:block}
 
 .cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-  margin-bottom:25px
+display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px
 }
-.card{
-  background:white;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 2px 10px #0000000d
+.card,.panel{
+background:#fff;border-radius:15px;padding:20px;
+margin-bottom:18px;box-shadow:0 2px 12px #00000012
 }
 .card small{color:#64748b}
-.card strong{
-  display:block;
-  font-size:30px;
-  margin-top:8px
-}
+.card strong{display:block;font-size:30px;margin-top:8px}
 
-.panel{
-  background:white;
-  border-radius:14px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 2px 10px #0000000d
-}
+h2{margin-top:0}
 
-.panel h2{
-  margin-top:0;
-  font-size:20px
-}
-
-table{
-  width:100%;
-  border-collapse:collapse
-}
-th,td{
-  text-align:left;
-  padding:12px 8px;
-  border-bottom:1px solid #e5e7eb;
-  font-size:14px
-}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid #eee}
 th{color:#475569}
 
+.table-wrap{overflow-x:auto}
+
+input,textarea{
+width:100%;padding:12px;border:1px solid #ccd2dc;
+border-radius:8px;margin:5px 0 12px
+}
+
+.grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:10px
+}
+
+button.action{
+border:0;border-radius:8px;padding:10px 14px;
+background:#111827;color:#fff;font-weight:bold
+}
+
+button.delete{
+border:0;border-radius:8px;padding:8px 10px;
+background:#fee2e2;color:#991b1b
+}
+
 .badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#dcfce7;
-  color:#166534;
-  font-size:12px;
-  font-weight:bold
+background:#dcfce7;color:#166534;
+padding:5px 9px;border-radius:20px;font-size:12px
 }
 
-.btn{
-  border:0;
-  border-radius:8px;
-  padding:10px 14px;
-  cursor:pointer;
-  font-weight:bold
-}
-.btn-primary{
-  background:#111827;
-  color:white
-}
-.btn-danger{
-  background:#fee2e2;
-  color:#991b1b
+.message{
+padding:12px;border-radius:8px;
+background:#eff6ff;color:#1e40af;margin-top:15px
 }
 
-input,select,textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  margin:6px 0 12px;
-  font-size:15px
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px
-}
-
-.status{
-  margin-top:15px;
-  padding:12px;
-  border-radius:8px;
-  background:#eff6ff;
-  color:#1e40af
-}
-
-.empty{
-  text-align:center;
-  padding:30px;
-  color:#64748b
-}
-
-footer{
-  text-align:center;
-  padding:30px;
-  color:#64748b;
-  font-size:13px
-}
-
-@media(max-width:600px){
-  main{padding:12px}
-  header h1{font-size:17px}
-  th,td{font-size:12px;padding:9px 5px}
-}
+.empty{text-align:center;padding:25px;color:#64748b}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div>
-    <h1>🤖 SAN2LAURE IA COMMERCE</h1>
-    <span>IGOSA SERVICES</span>
-  </div>
-  <span id="connection">Connexion...</span>
+<h1>🤖 SAN2LAURE IA COMMERCE</h1>
+<small>IGOSA SERVICES</small>
+<span id="connection">🔄 Connexion...</span>
 </header>
 
 <nav>
-  <button class="active" onclick="showSection('dashboard',this)">📊 Tableau de bord</button>
-  <button onclick="showSection('products',this)">🛍️ Produits</button>
-  <button onclick="showSection('orders',this)">📦 Commandes</button>
-  <button onclick="showSection('conversations',this)">💬 Conversations</button>
+<button class="active" data-page="dashboard">📊 Tableau de bord</button>
+<button data-page="products">🛍️ Produits</button>
+<button data-page="orders">📦 Commandes</button>
+<button data-page="conversations">💬 Conversations</button>
 </nav>
 
 <main>
 
-<section id="dashboard" class="section active">
+<section id="dashboard" class="page active">
 
-  <div class="cards">
-    <div class="card">
-      <small>Produits</small>
-      <strong id="countProducts">0</strong>
-    </div>
+<div class="cards">
 
-    <div class="card">
-      <small>Commandes</small>
-      <strong id="countOrders">0</strong>
-    </div>
+<div class="card">
+<small>Produits</small>
+<strong id="productsCount">0</strong>
+</div>
 
-    <div class="card">
-      <small>Conversations</small>
-      <strong id="countConversations">0</strong>
-    </div>
+<div class="card">
+<small>Commandes</small>
+<strong id="ordersCount">0</strong>
+</div>
 
-    <div class="card">
-      <small>Statut système</small>
-      <strong style="font-size:20px">🟢 ACTIF</strong>
-    </div>
-  </div>
+<div class="card">
+<small>Conversations</small>
+<strong id="conversationsCount">0</strong>
+</div>
 
-  <div class="panel">
-    <h2>Bienvenue dans SAN2LAURE IA COMMERCE</h2>
-    <p>
-      Assistant commercial intelligent de <strong>IGOSA SERVICES</strong>.
-    </p>
-    <p>
-      Le système permet de gérer les produits, les commandes et les
-      conversations des clients.
-    </p>
+<div class="card">
+<small>Système</small>
+<strong style="font-size:20px">🟢 ACTIF</strong>
+</div>
 
-    <div class="status" id="systemStatus">
-      Vérification de la connexion à la base de données...
-    </div>
-  </div>
+</div>
+
+<div class="panel">
+<h2>Bienvenue dans SAN2LAURE IA COMMERCE</h2>
+<p>Assistant commercial intelligent de <b>IGOSA SERVICES</b>.</p>
+<div id="dbStatus" class="message">
+🔄 Vérification de la connexion...
+</div>
+</div>
 
 </section>
 
 
-<section id="products" class="section">
+<section id="products" class="page">
 
-  <div class="panel">
-    <h2>🛍️ Gestion des produits</h2>
+<div class="panel">
 
-    <form id="productForm">
+<h2>🛍️ Ajouter un produit</h2>
 
-      <div class="form-grid">
+<form id="productForm">
 
-        <div>
-          <label>Nom du produit</label>
-          <input id="productName" required>
-        </div>
+<div class="grid">
 
-        <div>
-          <label>Catégorie</label>
-          <input id="productCategory">
-        </div>
+<div>
+<label>Nom</label>
+<input id="name" required>
+</div>
 
-        <div>
-          <label>Prix CFA</label>
-          <input id="productPrice" type="number" required>
-        </div>
+<div>
+<label>Catégorie</label>
+<input id="category">
+</div>
 
-        <div>
-          <label>Prix promotionnel</label>
-          <input id="productPromo" type="number">
-        </div>
+<div>
+<label>Prix CFA</label>
+<input id="price" type="number" required>
+</div>
 
-        <div>
-          <label>Stock</label>
-          <input id="productStock" type="number" value="0">
-        </div>
+<div>
+<label>Prix promotionnel</label>
+<input id="promo_price" type="number">
+</div>
 
-        <div>
-          <label>Variantes</label>
-          <input id="productVariants" placeholder="Noir, Marron, Rouge">
-        </div>
+<div>
+<label>Stock</label>
+<input id="stock" type="number" value="0">
+</div>
 
-      </div>
+<div>
+<label>Variantes</label>
+<input id="variants" placeholder="Noir, Marron">
+</div>
 
-      <label>Description</label>
-      <textarea id="productDescription" rows="3"></textarea>
+</div>
 
-      <button class="btn btn-primary" type="submit">
-        ➕ Ajouter le produit
-      </button>
+<label>Description</label>
+<textarea id="description"></textarea>
 
-    </form>
-  </div>
+<button class="action" type="submit">
+➕ Ajouter le produit
+</button>
 
-  <div class="panel">
-    <h2>Catalogue</h2>
+</form>
 
-    <div style="overflow:auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Produit</th>
-            <th>Catégorie</th>
-            <th>Prix</th>
-            <th>Stock</th>
-            <th>Variantes</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+</div>
 
-        <tbody id="productsTable">
-        </tbody>
+<div class="panel">
 
-      </table>
-    </div>
-  </div>
+<h2>Catalogue</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Produit</th>
+<th>Catégorie</th>
+<th>Prix</th>
+<th>Stock</th>
+<th>Variantes</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="productsTable">
+<tr>
+<td colspan="6" class="empty">Chargement...</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+</div>
 
 </section>
 
 
-<section id="orders" class="section">
+<section id="orders" class="page">
 
-  <div class="panel">
-    <h2>📦 Commandes</h2>
+<div class="panel">
 
-    <div style="overflow:auto">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Client</th>
-            <th>Téléphone</th>
-            <th>Produit</th>
-            <th>Quantité</th>
-            <th>Statut</th>
-          </tr>
-        </thead>
+<h2>📦 Commandes</h2>
 
-        <tbody id="ordersTable">
-        </tbody>
+<div class="table-wrap">
 
-     
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Client</th>
+<th>Téléphone</th>
+<th>Produit</th>
+<th>Qté</th>
+<th>Statut</th>
+</tr>
+</thead>
+
+<tbody id="ordersTable">
+<tr>
+<td colspan="6" class="empty">Chargement...</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section id="conversations" class="page">
+
+<div class="panel">
+
+<h2>💬 Conversations</h2>
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Téléphone</th>
+<th>Message</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody id="conversationsTable">
+<tr>
+<td colspan="4" class="empty">Chargement...</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+const $=id=>document.getElementById(id);
+
+function esc(v){
+return String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+}
+
+function money(v){
+return Number(v||0).toLocaleString("fr-FR")+" F CFA";
+}
+
+
+/* NAVIGATION */
+
+document.querySelectorAll("nav button").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+document.querySelectorAll("nav button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+const page=$(button.dataset.page);
+
+if(page){
+page.classList.add("active");
+}
+
+if(button.dataset.page==="products") loadProducts();
+if(button.dataset.page==="orders") loadOrders();
+if(button.dataset.page==="conversations") loadConversations();
+
+});
+
+});
+
+
+/* CONNEXION */
+
+async function health(){
+
+try{
+
+const r=await fetch("/api/health");
+const d=await r.json();
+
+if(d.ok){
+
+$("connection").textContent="🟢 Connecté";
+
+$("dbStatus").textContent=
+"🟢 Serveur connecté — PostgreSQL opérationnel.";
+
+}else{
+
+$("connection").textContent="🔴 Erreur";
+
+}
+
+}catch(e){
+
+$("connection").textContent="🔴 Hors ligne";
+
+$("dbStatus").textContent=
+"🔴 Impossible de contacter le serveur.";
+
+}
+
+}
+
+
+/* DASHBOARD */
+
+async function dashboard(){
+
+try{
+
+const r=await fetch("/api/dashboard");
+const d=await r.json();
+
+if(typeof d.products==="number")
+$("productsCount").textContent=d.products;
+
+if(typeof d.orders==="number")
+$("ordersCount").textContent=d.orders;
+
+if(typeof d.conversations==="number")
+$("conversationsCount").textContent=d.conversations;
+
+}catch(e){
+
+/* Les compteurs seront mis à jour depuis les listes */
+
+}
+
+}
+
+
+/* PRODUITS */
+
+async function loadProducts(){
+
+const table=$("productsTable");
+
+table.innerHTML=
+'<tr><td colspan="6" class="empty">🔄 Chargement...</td></tr>';
+
+try{
+
+const r=await fetch("/api/products");
+
+if(!r.ok) throw new Error("Erreur API");
+
+const data=await r.json();
+
+const products=Array.isArray(data)
+?data
+:(data.products||[]);
+
+$("productsCount").textContent=products.length;
+
+if(products.length===0){
+
+table.innerHTML=
+'<tr><td colspan="6" class="empty">Aucun produit enregistré.</td></tr>';
+
+return;
+}
+
+table.innerHTML=products.map(p=>`
+
+<tr>
+
+<td><b>${esc(p.name)}</b></td>
+
+<td>${esc(p.category)}</td>
+
+<td>${money(p.promo_price||p.promo||p.price)}</td>
+
+<td>
+<span class="badge">${p.stock??0}</span>
+</td>
+
+<td>${esc(p.variants)}</td>
+
+<td>
+<button class="delete"
+data-delete="${p.id}">
+Supprimer
+</button>
+</td>
+
+</tr>
+
+`).join("");
+
+document.querySelectorAll("[data-delete]")
+.forEach(btn=>{
+
+btn.addEventListener("click",()=>deleteProduct(btn.dataset.delete));
+
+});
+
+}catch(e){
+
+table.innerHTML=
+'<tr><td colspan="6" class="empty">❌ Erreur de chargement des produits.</td></tr>';
+
+}
+
+}
+
+
+/* SUPPRESSION */
+
+async function deleteProduct(id){
+
+if(!confirm("Voulez-vous supprimer ce produit ?")) return;
+
+try{
+
+const r=await fetch("/api/products/"+id,{
+method:"DELETE"
+});
+
+if(!r.ok) throw new Error();
+
+await loadProducts();
+await dashboard();
+
+}catch(e){
+
+alert("❌ Suppression impossible.");
+
+}
+
+}
+
+
+/* AJOUT PRODUIT */
+
+$("productForm").addEventListener("submit",async e=>{
+
+e.preventDefault();
+
+const product={
+
+name:$("name").value,
+category:$("category").value,
+price:Number($("price").value),
+promo_price:Number($("promo_price").value)||null,
+stock:Number($("stock").value)||0,
+variants:$("variants").value,
+description:$("description").value
+
+};
+
+try{
+
+const r=await fetch("/api/products",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(product)
+
+});
+
+if(!r.ok) throw new Error();
+
+alert("✅ Produit ajouté avec succès.");
+
+e.target.reset();
+
+await loadProducts();
+await dashboard();
+
+}catch(e){
+
+alert("❌ Impossible d'ajouter le produit.");
+
+}
+
+});
+
+
+/* COMMANDES */
+
+async function loadOrders(){
+
+const table=$("ordersTable");
+
+try{
+
+const r=await fetch("/api/orders");
+const data=await r.json();
+
+const orders=Array.isArray(data)
+?data
+:(data.orders||[]);
+
+$("ordersCount").textContent=orders.length;
+
+if(!orders.length){
+
+table.innerHTML=
+'<tr><td colspan="6" class="empty">Aucune commande.</td></tr>';
+
+return;
+}
+
+table.innerHTML=orders.map(o=>`
+
+<tr>
+<td>#${o.id}</td>
+<td>${esc(o.customer_name||o.name)}</td>
+<td>${esc(o.phone)}</td>
+<td>${esc(o.product_name||o.product)}</td>
+<td>${o.quantity||1}</td>
+<td><span class="badge">${esc(o.status||"Nouvelle")}</span></td>
+</tr>
+
+`).join("");
+
+}catch(e){
+
+table.innerHTML=
+'<tr><td colspan="6" class="empty">❌ Erreur de chargement.</td></tr>';
+
+}
+
+}
+
+
+/* CONVERSATIONS */
+
+async function loadConversations(){
+
+const table=$("conversationsTable");
+
+try{
+
+const r=await fetch("/api/conversations");
+const data=await r.json();
+
+const conversations=Array.isArray(data)
+?data
+:(data.conversations||[]);
+
+$("conversationsCount").textContent=
+conversations.length;
+
+if(!conversations.length){
+
+table.innerHTML=
+'<tr><td colspan="4" class="empty">Aucune conversation.</td></tr>';
+
+return;
+}
+
+table.innerHTML=conversations.map(c=>`
+
+<tr>
+<td>#${c.id}</td>
+<td>${esc(c.phone)}</td>
+<td>${esc(c.message)}</td>
+<td>${esc(c.created_at)}</td>
+</tr>
+
+`).join("");
+
+}catch(e){
+
+table.innerHTML=
+'<tr><td colspan="4" class="empty">❌ Erreur de chargement.</td></tr>';
+
+}
+
+}
+
+
+/* DÉMARRAGE */
+
+health();
+dashboard();
+loadProducts();
+
+</script>
+
+</body>
+</html>
