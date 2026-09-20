@@ -68,6 +68,44 @@ app.post('/api/products', (req, res) => {
 
   products.push(product);
   res.json(product);
+});/* MODIFIER UN PRODUIT */
+app.put('/api/products/:id', (req, res) => {
+  const index = products.findIndex(p => String(p.id) === String(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Produit introuvable' });
+  }
+
+  const { name, category, price, stock, status } = req.body;
+
+  products[index] = {
+    ...products[index],
+    name: name ?? products[index].name,
+    category: category ?? products[index].category,
+    price: Number(price ?? products[index].price),
+    stock: Number(stock ?? products[index].stock),
+    status: status ?? (Number(stock ?? products[index].stock) > 0 ? 'Disponible' : 'Rupture')
+  };
+
+  res.json(products[index]);
+});
+
+
+/* SUPPRIMER UN PRODUIT */
+app.delete('/api/products/:id', (req, res) => {
+  const index = products.findIndex(p => String(p.id) === String(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Produit introuvable' });
+  }
+
+  const deleted = products.splice(index, 1)[0];
+
+  res.json({
+    success: true,
+    message: 'Produit supprimé',
+    product: deleted
+  });
 });
 
 /* MODIFIER UN PRODUIT */
