@@ -4,7 +4,7 @@ import {fileURLToPath} from 'url';
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const app=express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname,'publique')));
 let products=[
 {id:1,name:'Portefeuille RFID',category:'Portefeuilles',price:5000,stock:20,status:'Disponible'},
 {id:2,name:'Sac à main',category:'Sacs',price:6000,stock:15,status:'Disponible'},
@@ -18,5 +18,5 @@ app.post('/api/orders',(q,r)=>{let o={id:'CMD-'+String(orders.length+1).padStart
 app.get('/api/conversations',(q,r)=>r.json(conversations));
 app.get('/webhook/whatsapp',(q,r)=>q.query['hub.mode']==='subscribe'&&q.query['hub.verify_token']===process.env.WHATSAPP_VERIFY_TOKEN?r.status(200).send(q.query['hub.challenge']):r.sendStatus(403));
 app.post('/webhook/whatsapp',(q,r)=>{console.log('WhatsApp webhook',JSON.stringify(q.body));r.sendStatus(200)});
-app.use((q,r)=>r.sendFile(path.join(__dirname,'public','index.html')));
+app.use((q,r)=>r.sendFile(path.join(__dirname,'publique','index.html')));;
 app.listen(process.env.PORT||3000,()=>console.log('SAN2LAURE IA COMMERCE démarré'));
