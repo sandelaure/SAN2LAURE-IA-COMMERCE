@@ -23,8 +23,23 @@ app.get("/api/orders",async(_q,r)=>{try{r.json((await pool.query("SELECT * FROM 
 app.post("/api/orders",async(q,r)=>{try{let b=q.body,qty=Math.max(1,Math.round(Number(b.quantity||1))),unit=Math.max(0,Math.round(Number(b.unit_price||0)));let x=await pool.query("INSERT INTO orders(product_id,product_name,variant,quantity,unit_price,total_price,customer_name,customer_phone,city,address,delivery,comment,status) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *",[b.product_id||null,String(b.product_name||""),String(b.variant||""),qty,unit,qty*unit,String(b.customer_name||""),String(b.customer_phone||""),String(b.city||""),String(b.address||""),String(b.delivery||""),String(b.comment||""),String(b.status||"New")]);r.status(201).json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
 app.put("/api/orders/:id",async(q,r)=>{try{let x=await pool.query("UPDATE orders SET status=$1,updated_at=NOW() WHERE id=$2 RETURNING *",[String(q.body.status||"New"),q.params.id]);if(!x.rows[0])return r.status(404).json({error:"Commande introuvable"});r.json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
 app.get("/api/conversations",async(_q,r)=>{try{r.json((await pool.query("SELECT * FROM conversations ORDER BY updated_at DESC")).rows)}catch(e){r.status(500).json({error:e.message})}});
-app.post("/api/conversations",async(q,r)=>{try{let b=q.body,x=await pool.query("INSERT INTO conversations(customer_phone,customer_name,last_message,intent,status) VALUES($1,$2,$3,$4,$5) RETURNING *",[String(b.customer_phone||""),String(b.customer_name||""),String(b.last_message||""),String(b.intent||""),String(b.status||"Open")]);r.status(201).json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
 app.get("/webhook/whatsapp",(q,r)=>{
+  const mode=q.query["hub.mode"];
+  const token=String(q.query["hub.verify_token"]||"").trim();
+  const challenge=q.query["hub.challenge"];
+  const expected=String(process.env.WHATSAPP_VERIFY_TOKEN||"").trim();
+
+  if(mode==="subscribe" && token===expected){
+    return r.status(200).send(challenge);
+  }
+
+  return r.sendStatus(403);
+});
+
+app.post("/webhook/whatsapp",(q,r)=>{
+  console.log("WhatsApp webhook:",JSON.stringify(q.body));
+  return r.sendStatus(200);
+});
   const mode=q.query["hub.mode"];
   const token=String(q.query["hub.verify_token"]||"").trim();
   const challenge=q.query["hub.challenge"];
