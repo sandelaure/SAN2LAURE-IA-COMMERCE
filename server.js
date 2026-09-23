@@ -24,7 +24,21 @@ app.post("/api/orders",async(q,r)=>{try{let b=q.body,qty=Math.max(1,Math.round(N
 app.put("/api/orders/:id",async(q,r)=>{try{let x=await pool.query("UPDATE orders SET status=$1,updated_at=NOW() WHERE id=$2 RETURNING *",[String(q.body.status||"New"),q.params.id]);if(!x.rows[0])return r.status(404).json({error:"Commande introuvable"});r.json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
 app.get("/api/conversations",async(_q,r)=>{try{r.json((await pool.query("SELECT * FROM conversations ORDER BY updated_at DESC")).rows)}catch(e){r.status(500).json({error:e.message})}});
 app.post("/api/conversations",async(q,r)=>{try{let b=q.body,x=await pool.query("INSERT INTO conversations(customer_phone,customer_name,last_message,intent,status) VALUES($1,$2,$3,$4,$5) RETURNING *",[String(b.customer_phone||""),String(b.customer_name||""),String(b.last_message||""),String(b.intent||""),String(b.status||"Open")]);r.status(201).json(x.rows[0])}catch(e){r.status(500).json({error:e.message})}});
-app.get("/webhook/whatsapp",(q,r)=>{if(q.query["hub.mode"]==="subscribe"&&q.query["hub.verify_token"]===process.env.WHATSAPP_VERIFY_TOKEN)return r.status(200).send(q.query["hub.challenge"]);r.sendStatus(403)});
-app.post("/webhook/whatsapp",(q,r)=>{console.log("WhatsApp webhook:",JSON.stringify(q.body));r.sendStatus(200)});
+app.get("/webhook/whatsapp",(q,r)=>{
+  const mode=q.query["hub.mode"];
+  const token=String(q.query["hub.verify_token"]||"").trim();
+  const challenge=q.query["hub.challenge"];
+
+  if(mode==="subscribe" && token===String(process.env.WHATSAPP_VERIFY_TOKEN||"").trim()){
+    return r.status(200).send(challenge);
+  }
+
+  return r.sendStatus(403);
+});
+
+app.post("/webhook/whatsapp",(q,r)=>{
+  console.log("WhatsApp webhook:",JSON.stringify(q.body));
+  return r.sendStatus(200);
+});
 app.get("/{*splat}",(_q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
 initDb().then(()=>app.listen(PORT,()=>console.log(BUSINESS_NAME+" running on "+PORT))).catch(e=>{console.error(e);process.exit(1)});
