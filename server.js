@@ -40,20 +40,5 @@ app.post("/webhook/whatsapp",(q,r)=>{
   console.log("WhatsApp webhook:",JSON.stringify(q.body));
   return r.sendStatus(200);
 });
-  const mode=q.query["hub.mode"];
-  const token=String(q.query["hub.verify_token"]||"").trim();
-  const challenge=q.query["hub.challenge"];
-
-  if(mode==="subscribe" && token===String(process.env.WHATSAPP_VERIFY_TOKEN||"").trim()){
-    return r.status(200).send(challenge);
-  }
-
-  return r.sendStatus(403);
-});
-
-app.post("/webhook/whatsapp",(q,r)=>{
-  console.log("WhatsApp webhook:",JSON.stringify(q.body));
-  return r.sendStatus(200);
-});
 app.get("/{*splat}",(_q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
 initDb().then(()=>app.listen(PORT,()=>console.log(BUSINESS_NAME+" running on "+PORT))).catch(e=>{console.error(e);process.exit(1)});
