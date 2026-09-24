@@ -19,6 +19,10 @@ const pool = new Pool({
     : false
 });
 
+/* =========================
+   DATABASE
+========================= */
+
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS products(
@@ -53,7 +57,16 @@ async function initDb() {
   if (Number(count.rows[0].count) === 0) {
     await pool.query(`
       INSERT INTO products
-      (name, category, description, price, promo, stock, variants, status)
+      (
+        name,
+        category,
+        description,
+        price,
+        promo,
+        stock,
+        variants,
+        status
+      )
       VALUES
       (
         'Montre classique',
@@ -357,28 +370,57 @@ app.get("/api/conversations", async (_q, r) => {
 
 /* =========================
    WHATSAPP WEBHOOK
-   DIAGNOSTIC TEMPORAIRE
+   VERIFICATION SECURISEE
 ========================= */
 
 app.get("/webhook/whatsapp", (q, r) => {
-  console.log("================================");
-  console.log("WEBHOOK ATTEINT");
+  const mode = String(
+    q.query["hub.mode"] || ""
+  ).trim();
+
+  const token = String(
+    q.query["hub.verify_token"] || ""
+  ).trim();
+
+  const challenge = String(
+    q.query["hub.challenge"] || ""
+  );
+
+  const expected = String(
+    process.env.WHATSAPP_VERIFY_TOKEN || ""
+  ).trim();
+
+  console.log("WEBHOOK VERIFICATION");
+  console.log("Mode:", mode);
   console.log(
-    "Mode:",
-    q.query["hub.mode"] || "AUCUN"
+    "Token reçu:",
+    token ? "OUI" : "NON"
   );
   console.log(
-    "Challenge:",
-    q.query["hub.challenge"] || "AUCUN"
+    "Token configuré:",
+    expected ? "OUI" : "NON"
   );
-  console.log("================================");
+
+  if (
+    mode === "subscribe" &&
+    token === expected
+  ) {
+    console.log(
+      "WEBHOOK VERIFICATION OK"
+    );
+
+    return r
+      .status(200)
+      .send(challenge);
+  }
+
+  console.log(
+    "WEBHOOK VERIFICATION REFUSÉE"
+  );
 
   return r
-    .status(200)
-    .send(
-      q.query["hub.challenge"] ||
-      "WEBHOOK OK"
-    );
+    .status(403)
+    .send("Forbidden");
 });
 
 /* =========================
