@@ -161,17 +161,24 @@ app.get("/api/conversations",async(_q,r)=>{
 });
 
 /* WHATSAPP WEBHOOK */
+/* WHATSAPP WEBHOOK */
 app.get("/webhook/whatsapp",(q,r)=>{
   const mode=String(q.query["hub.mode"]||"").trim();
   const token=String(q.query["hub.verify_token"]||"").trim();
   const challenge=String(q.query["hub.challenge"]||"");
   const expected=String(process.env.WHATSAPP_VERIFY_TOKEN||"").trim();
 
+  console.log("WEBHOOK TEST");
+  console.log("mode:",mode);
+  console.log("token reçu:",token ? "OUI" : "NON");
+  console.log("token configuré:",expected ? "OUI" : "NON");
+  console.log("token correspondant:",token === expected ? "OUI" : "NON");
+
   if(mode==="subscribe" && token===expected){
     return r.status(200).send(challenge);
   }
 
-  return r.sendStatus(403);
+  return r.status(403).send("Forbidden");
 });
 
 app.post("/webhook/whatsapp",(q,r)=>{
